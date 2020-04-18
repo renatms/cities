@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 //var y = document.getElementById('user-region');
                 //var z = document.getElementById('user-country');
                 var name = prompt("Это ваш город?", x.innerHTML);
-                if (name !== null) location.href = "index.php?CitySearch%5Bname%5D=" + x.innerHTML;
+                if (name !== null) location.href = "/index?CitySearch%5Bname%5D=" + x.innerHTML;
             };
         </script>
     </head>

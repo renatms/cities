@@ -41,7 +41,7 @@ class City extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Город',
             'created_at' => 'Created At',
         ];
     }
