@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\Comment;
+use app\models\CommentForm;
 use app\models\LoginForm;
 use app\models\SignupForm;
 use Yii;
@@ -55,8 +57,27 @@ class SiteController extends Controller
      */
     public function actionView($id)
     {
+        $comment = new CommentForm();
+        $comments= Comment::find()->where(['city_id' => $id])->all();
+
+        if (!Yii::$app->user->isGuest)
+        {
+            if(Yii::$app->request->isPost)
+            {
+                //$comment->saveComment($id);
+                //$comment->user_id =Yii::$app->user->identity->getId();
+                //$comment->text = Yii::$app->request->Post('Comment')['text'];
+
+                //$comment->save();
+
+            }
+        }
+
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'comments' => $comments,
+            'comment' => $comment,
         ]);
     }
 
