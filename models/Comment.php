@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "comment".
@@ -35,8 +36,12 @@ class Comment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['comment'], 'required'],
+            [['comment'], 'string', 'length' => [3,250]],
             [['city_id', 'rating', 'user_id'], 'integer'],
-            [['created_at'], 'safe'],
+//            [['created_at'], 'safe'],
+            [['created_at'], 'date', 'format' => 'php:Y-m-d'],
+            [['created_at'], 'default', 'value' => date('Y-m-d')],
             [['title', 'text', 'image'], 'string', 'max' => 255],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],

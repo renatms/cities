@@ -50,16 +50,15 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--                <img width="30" class="img-circle" src="--><?//= $comment->user->image; ?><!--" alt="">-->
 <!--            </div>-->
 
-            <div class="comment-text">
+            <div class="text-body">
                 <a href="#" class="replay btn pull-right"> Replay</a>
-                <h5><?= $comm->user->username ?></h5>
+                <h5 class="text-justify"><?= $comm->user->username ?></h5>
 
                 <p class="comment-date">
                     <?= $comm->getDate(); ?>
                 </p>
 
-
-                <p class="para"><?= $comm->text; ?></p>
+                <p class="para" style="border-bottom-style: solid"><?= $comm->text; ?></p>
             </div>
         </div>
         <!-- end bottom comment-->

@@ -58,21 +58,17 @@ class SiteController extends Controller
     public function actionView($id)
     {
         $comment = new CommentForm();
-        $comments= Comment::find()->where(['city_id' => $id])->all();
 
         if (!Yii::$app->user->isGuest)
         {
             if(Yii::$app->request->isPost)
             {
-                //$comment->saveComment($id);
-                //$comment->user_id =Yii::$app->user->identity->getId();
-                //$comment->text = Yii::$app->request->Post('Comment')['text'];
-
-                //$comment->save();
-
+                $comment->load(Yii::$app->request->post());
+                $comment->saveComment($id);
             }
         }
 
+        $comments= Comment::find()->where(['city_id' => $id])->all();
 
         return $this->render('view', [
             'model' => $this->findModel($id),

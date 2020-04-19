@@ -17,18 +17,19 @@ class CommentForm extends Model
         ];
     }
 
+
     /**
-     * @param $article_id
+     * @param $city_id
      * @return bool
      */
     public function saveComment($city_id)
     {
-//        $comment = new Comment();
-//        $comment->text = $this->comment;
-//        $comment->user_id = Yii::$app->user->id;
-//        $comment->article_id = $article_id;
+        $comment = new Comment();
+        $comment->text = $this->comment;
+        $comment->user_id = Yii::$app->user->id;
+        $comment->city_id = $city_id;
 //        $comment->status =0;
-//        $comment->date = date('Y-m-d  h:m' );
-//        return $comment->save();
+        $comment->created_at = date('Y-m-d' );
+        return $comment->save(false);
     }
 }
