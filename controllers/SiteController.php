@@ -12,6 +12,7 @@ use app\models\CitySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * SiteController implements the CRUD actions for City model.
@@ -57,22 +58,54 @@ class SiteController extends Controller
      */
     public function actionView($id)
     {
-        $comment = new CommentForm();
 
-        if (!Yii::$app->user->isGuest)
-        {
-            if(Yii::$app->request->isPost)
-            {
-                $comment->load(Yii::$app->request->post());
-                $comment->saveComment($id);
+        $comments = Comment::find()->where(['city_id' => $id])->all();
+
+        if (!Yii::$app->user->isGuest) {
+            if (Yii::$app->request->Get('user_like')) {
+
+                $city = Yii::$app->request->Get('id');
+                $user = Yii::$app->request->Get('user_like');
+                $comment_id = Yii::$app->request->Get('comm_id');
+
+
+                $like = Comment::find()->where(['city_id' => $city])
+                    ->andWhere(['user_id' => $user])
+                    ->andWhere(['id' => $comment_id])->one();
+
+                if ($like->rating == 0) {
+                    $like->rating = 1;
+                    $like->save(false);
+                } else {
+                    $like->rating = 0;
+                    $like->save(false);
+                }
             }
-        }
-
-        $comments= Comment::find()->where(['city_id' => $id])->all();
+        };
 
         return $this->render('view', [
             'model' => $this->findModel($id),
             'comments' => $comments,
+            //'comment' => $comment,
+        ]);
+    }
+
+    public function actionSetComment($id)
+    {
+        $comment = new CommentForm;
+
+        if (Yii::$app->request->isPost) {
+            $comment->load(Yii::$app->request->post());
+            $comment->image = UploadedFile::getInstance($comment, 'image');
+            $generateFile = strtolower(md5(uniqid($comment->image->baseName)) . '.' . $comment->image->extension);
+            $comment->image = $generateFile;
+            $comment->upload($comment->image);
+            $comment->saveComment($id);
+            return $this->redirect(['view', 'id' => $id]);
+        }
+
+        return $this->render('comment', [
+            //'model' => $this->findModel($id),
             'comment' => $comment,
         ]);
     }
@@ -140,7 +173,8 @@ class SiteController extends Controller
     /**
      * @return string
      */
-    public function actionAbout()
+    public
+    function actionAbout()
     {
         $model = new City();
 
@@ -152,7 +186,8 @@ class SiteController extends Controller
     /**
      * @return string|\yii\web\Response
      */
-    public function actionSignup()
+    public
+    function actionSignup()
     {
         $model = new SignupForm();
 
@@ -173,7 +208,8 @@ class SiteController extends Controller
     /**
      * @return string|\yii\web\Response
      */
-    public function actionLogin()
+    public
+    function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -194,7 +230,8 @@ class SiteController extends Controller
     /**
      * @return \yii\web\Response
      */
-    public function actionLogout()
+    public
+    function actionLogout()
     {
         Yii::$app->user->logout();
 

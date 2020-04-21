@@ -37,14 +37,27 @@ class Comment extends \yii\db\ActiveRecord
     {
         return [
             [['comment'], 'required'],
-            [['comment'], 'string', 'length' => [3,250]],
+            [['comment'], 'string', 'length' => [3, 250]],
             [['city_id', 'rating', 'user_id'], 'integer'],
-//            [['created_at'], 'safe'],
+            [['rating'], 'default', 'value' => 0],
             [['created_at'], 'date', 'format' => 'php:Y-m-d'],
             [['created_at'], 'default', 'value' => date('Y-m-d')],
-            [['title', 'text', 'image'], 'string', 'max' => 255],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['title', 'text'], 'string', 'max' => 255],
+            [['image'], 'file', 'extensions' => 'jpg,png'],
+            [
+                ['city_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => City::className(),
+                'targetAttribute' => ['city_id' => 'id']
+            ],
+            [
+                ['user_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => User::className(),
+                'targetAttribute' => ['user_id' => 'id']
+            ],
         ];
     }
 
@@ -63,6 +76,21 @@ class Comment extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'created_at' => 'Created At',
         ];
+    }
+
+    public function getImage()
+    {
+        return $this->image ? '/uploads/' . $this->image : 'no-image';
+    }
+
+//    public function saveImage(Comment $model)
+//    {
+//        return $model->save();
+//    }
+
+    public function deleteImage($file)
+    {
+        unlink("uploads/{$file}");
     }
 
     public function getDate()
@@ -89,4 +117,5 @@ class Comment extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
 }

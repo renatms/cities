@@ -29,7 +29,8 @@ class City extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at'], 'safe'],
+            [['created_at'], 'date', 'format' => 'php:Y-m-d'],
+            [['created_at'], 'default', 'value' => date('Y-m-d')],
             [['name'], 'string', 'max' => 255],
         ];
     }
