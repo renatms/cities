@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php if (empty($searchModel->name)): ?>
     <head>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-        <script src="//api-maps.yandex.ru/2.0-stable/?apikey=7885a3e6-21e5-4370-896a-21f85e233349&load=package.standard&lang=ru-RU"
+        <script src="//api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU"
                 type="text/javascript"></script>
         <script type="text/javascript">
             window.onload = function () {
