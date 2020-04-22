@@ -47,33 +47,32 @@ $this->params['breadcrumbs'][] = $this->title;
     <h4 class="label-info">comments</h4>
     <?php foreach ($comments as $comm): ?>
 
-        <div class="media-list"><!--bottom comment-->
-
-            <!--            <div class="comment-img">-->
-            <!--                <img width="30" class="img-circle" src="-->
-            <? //= $comment->user->image; ?><!--" alt="">-->
-            <!--            </div>-->
+        <div class="media-list">
 
             <div class="mar-btm">
 
                 <h5 class="btn-link text-semibold media-heading box-inline"><?= $comm->user->username ?></h5>
 
-                <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i>
+                <a><p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i>
                     <?= $comm->getDate(); ?>
                 </p>
-
-                <p><?= $comm->title; ?></p>
-                <p><?= $comm->text; ?></p>
-
-                <a class="btn btn-sm btn-default btn-hover-success" href="<?= Url::toRoute([
-                    'site/view',
-                    'id' => $model->id,
-                    'user_like' =>$comm->user_id,
-                    'comm_id' => $comm->id
-                ]) ?>"><i class="fa fa-thumbs-up"></i><?= $comm->rating ?></a>
+                </a></div>
+            <div class="image_wrapper"><a href="#" target="_parent">
+                    <img src="<?= $comm->getImage() ?>" width="300" alt="image 1"/></a>
             </div>
-            <br/>
+
+            <p><?= $comm->title; ?></p>
+            <p><?= $comm->text; ?></p>
+
+            <a class="btn btn-sm btn-default btn-hover-success" href="<?= Url::toRoute([
+                'site/view',
+                'id' => $model->id,
+                //'user_' => $comm->user_id,
+                'user_' => Yii::$app->user->id,
+                'comm_id' => $comm->id
+            ]) ?>"><i class="fa fa-thumbs-up"></i><?= $comm->rating ?></a>
         </div>
+        <br/>
         <!-- end bottom comment-->
 
     <?php endforeach; ?>
@@ -96,9 +95,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--    <div class="row">-->
 <!--        <div class="form-group col-sm-6">-->
 <!--            <p for="name" class="btn-link text-semibold media-heading box-inline">-->
-<!--                <i> --><?//= Yii::$app->user->identity->username; ?><!--</i></p>-->
+<!--                <i> --><? //= Yii::$app->user->identity->username; ?><!--</i></p>-->
 <!--            <p for="email" class="btn-link text-semibold media-heading box-inline">-->
-<!--                <i> --><?//= Yii::$app->user->identity->email; ?><!--</i></p>-->
+<!--                <i> --><? //= Yii::$app->user->identity->email; ?><!--</i></p>-->
 <!---->
 <!--        </div>-->
 <!--    </div>-->
@@ -110,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <!---->
 <!--        <div class="panel">-->
 <!--            <div class="panel-body">-->
-<!--                --><?//= $form->field($comment, 'comment')->textarea([
+<!--                --><? //= $form->field($comment, 'comment')->textarea([
 //                    'class' => 'form-control',
 //                    'placeholder' => 'Write message'
 //                ])->label(false) ?>

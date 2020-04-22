@@ -38,12 +38,12 @@ class Comment extends \yii\db\ActiveRecord
         return [
             [['comment'], 'required'],
             [['comment'], 'string', 'length' => [3, 250]],
+            [['title'], 'required'],
+            [['title'], 'string', 'length' => [3, 250]],
             [['city_id', 'rating', 'user_id'], 'integer'],
             [['rating'], 'default', 'value' => 0],
             [['created_at'], 'date', 'format' => 'php:Y-m-d'],
             [['created_at'], 'default', 'value' => date('Y-m-d')],
-            [['title', 'text'], 'string', 'max' => 255],
-            [['image'], 'file', 'extensions' => 'jpg,png'],
             [
                 ['city_id'],
                 'exist',

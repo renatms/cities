@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Comment;
 use app\models\CommentForm;
+use app\models\Likes;
 use app\models\LoginForm;
 use app\models\SignupForm;
 use Yii;
@@ -62,26 +63,47 @@ class SiteController extends Controller
         $comments = Comment::find()->where(['city_id' => $id])->all();
 
         if (!Yii::$app->user->isGuest) {
-            if (Yii::$app->request->Get('user_like')) {
+            if (Yii::$app->request->Get('user_')) {
 
                 $city = Yii::$app->request->Get('id');
-                $user = Yii::$app->request->Get('user_like');
+                $user = Yii::$app->request->Get('user_');
                 $comment_id = Yii::$app->request->Get('comm_id');
 
+                $like = Likes::find()->where(['user_id' => $user])
+                    ->andWhere(['ratable_id' => $comment_id])
+                    ->andWhere(['city_id' => $city])
+                    ->one();
 
-                $like = Comment::find()->where(['city_id' => $city])
-                    ->andWhere(['user_id' => $user])
-                    ->andWhere(['id' => $comment_id])->one();
+                if ($like == null) {
+                    $like = new Likes();
+                    $like->city_id = $city;
+                    $like->user_id = $user;
+                    $like->vote = 0;
+                    $like->ratable_id = $comment_id;
+                    $like->save();
+                }
 
-                if ($like->rating == 0) {
-                    $like->rating = 1;
+                $comm_rating = Comment::find()
+                    ->where(['id' => $comment_id])
+                    ->andWhere(['city_id' => $city])
+                    ->one();
+
+                //var_dump($like->vote);die();
+                //var_dump($comm_rating->rating);die();
+
+                if ($like->vote == 0) {
+                    $like->vote = 1;
+                    $comm_rating->rating++;
                     $like->save(false);
+                    $comm_rating->save(false);
                 } else {
-                    $like->rating = 0;
+                    $like->vote = 0;
+                    $comm_rating->rating--;
                     $like->save(false);
+                    $comm_rating->save(false);
                 }
             }
-        };
+        }
 
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -98,8 +120,7 @@ class SiteController extends Controller
             $comment->load(Yii::$app->request->post());
             $comment->image = UploadedFile::getInstance($comment, 'image');
             $generateFile = strtolower(md5(uniqid($comment->image->baseName)) . '.' . $comment->image->extension);
-            $comment->image = $generateFile;
-            $comment->upload($comment->image);
+            $comment->image = $comment->upload($generateFile);
             $comment->saveComment($id);
             return $this->redirect(['view', 'id' => $id]);
         }

@@ -19,7 +19,7 @@ class CommentForm extends Model
             [['title'], 'string', 'length' => [3, 250]],
             [['comment'], 'required'],
             [['comment'], 'string', 'length' => [3, 250]],
-            [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpg,png'],
+            [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpg, png'],
         ];
     }
 
