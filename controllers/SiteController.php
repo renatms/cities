@@ -61,6 +61,12 @@ class SiteController extends Controller
     {
 
         $comments = Comment::find()->where(['city_id' => $id])->all();
+        $likes = Likes::find()
+            ->where(['city_id' => $id])
+            ->andwhere(['user_id' => Yii::$app->user->id])
+            ->all();
+
+        //var_dump($likes);die();
 
         if (!Yii::$app->user->isGuest) {
             if (Yii::$app->request->Get('user_')) {
@@ -79,6 +85,7 @@ class SiteController extends Controller
                     $like->city_id = $city;
                     $like->user_id = $user;
                     $like->vote = 0;
+                    $like->color = 'black';
                     $like->ratable_id = $comment_id;
                     $like->save();
                 }
@@ -93,14 +100,20 @@ class SiteController extends Controller
 
                 if ($like->vote == 0) {
                     $like->vote = 1;
+                    $like->color = 'green';
                     $comm_rating->rating++;
                     $like->save(false);
                     $comm_rating->save(false);
+
+                    return $this->redirect(['view', 'id' => $id]);
                 } else {
                     $like->vote = 0;
+                    $like->color = 'black';
                     $comm_rating->rating--;
                     $like->save(false);
                     $comm_rating->save(false);
+
+                    return $this->redirect(['view', 'id' => $id]);
                 }
             }
         }
@@ -108,6 +121,7 @@ class SiteController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
             'comments' => $comments,
+            'likes' => $likes
             //'comment' => $comment,
         ]);
     }

@@ -31,9 +31,11 @@ class Likes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['city_id', 'user_id', 'vote', 'ratable_id'], 'required'],
+            [['city_id', 'user_id', 'vote','color', 'ratable_id'], 'required'],
             [['city_id', 'user_id', 'vote', 'ratable_id'], 'integer'],
             [['vote'], 'default', 'value' => 0],
+            [['color'], 'string'],
+            [['color'], 'default', 'value' => 'black'],
             [
                 ['user_id'],
                 'exist',
@@ -61,6 +63,7 @@ class Likes extends \yii\db\ActiveRecord
             'city_id' => 'City_ID',
             'user_id' => 'User ID',
             'vote' => 'Vote',
+            'color' => 'Color',
             'ratable_id' => 'Ratable ID',
         ];
     }

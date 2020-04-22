@@ -8,6 +8,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\City */
 /* @var $comments app\models\Comment */
+/* @var $likes app\models\Likes */
 
 
 $this->title = $model->name;
@@ -45,6 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php if (!empty($comments)): ?>
 
     <h4 class="label-info">comments</h4>
+    <?php $i=0;?>
     <?php foreach ($comments as $comm): ?>
 
         <div class="media-list">
@@ -70,7 +72,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 //'user_' => $comm->user_id,
                 'user_' => Yii::$app->user->id,
                 'comm_id' => $comm->id
-            ]) ?>"><i class="fa fa-thumbs-up"></i><?= $comm->rating ?></a>
+            ]) ?>"><i class="fa fa-thumbs-up" style="color: <?= $likes[$i++]->color;  ?>  "></i><?= $comm->rating ?>
+            </a>
         </div>
         <br/>
         <!-- end bottom comment-->
